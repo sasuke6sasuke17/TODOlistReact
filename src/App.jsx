@@ -3,11 +3,13 @@ import React from "react";
 import { useState } from "react";
 import "./styles.css";
 import InputTodo from "./components/InputTodo";
+import IncompleteTodos from "./components/IncompleteTodos";
+import CompleteTodos from "./components/CompleteTodos";
 
 const App = () => {
   const [TodoText, setTodoText] = useState("");
 
-  const [IncompleteTodos, setIncompleteTodos] = useState([]);
+  const [IncompleteTodo, setIncompleteTodos] = useState([]);
 
   const [CompleteList, setCompleteList] = useState([]);
 
@@ -18,23 +20,23 @@ const App = () => {
   const onClickAdd = () => {
     // alert();
     if (TodoText === "") return; //　空欄で追加ボタンを押しても何も起こらない
-    const newTodos = [...IncompleteTodos, TodoText];
+    const newTodos = [...IncompleteTodo, TodoText];
     setIncompleteTodos(newTodos); // 新しく追加したものを未完了のTODOに追加する
     setTodoText(""); // 追加ボタンを押した後、入力欄を空欄にする
   };
 
   const onClickDelete = (index) => {
     // alert();
-    const newTodos = [...IncompleteTodos];
+    const newTodos = [...IncompleteTodo];
     newTodos.splice(index, 1); // index=>何番目、1=>1個
     setIncompleteTodos(newTodos);
   };
 
   const onClickComplete = (index) => {
-    const newIncompleteTodos = [...IncompleteTodos];
+    const newIncompleteTodos = [...IncompleteTodo];
     newIncompleteTodos.splice(index, 1);
 
-    const newCompleteTodos = [...CompleteList, IncompleteTodos[index]];
+    const newCompleteTodos = [...CompleteList, IncompleteTodo[index]];
     setIncompleteTodos(newIncompleteTodos);
     setCompleteList(newCompleteTodos);
   };
@@ -43,7 +45,7 @@ const App = () => {
     const newCompleteTodos = [...CompleteList];
     newCompleteTodos.splice(index, 1);
 
-    const newIncompleteTodos = [...IncompleteTodos, CompleteList[index]];
+    const newIncompleteTodos = [...IncompleteTodo, CompleteList[index]];
     setIncompleteTodos(newIncompleteTodos);
     setCompleteList(newCompleteTodos);
   };
@@ -63,7 +65,7 @@ const App = () => {
         onChange={onChangeTodoText}
         onClick={onClickAdd}
       />
-      <div className="incomplete_area">
+      {/* <div className="incomplete_area">
         <p className="title">未完了のTODO</p>
         <ul>
           {IncompleteTodos.map((todo, index) => {
@@ -78,8 +80,13 @@ const App = () => {
             );
           })}
         </ul>
-      </div>
-      <div className="complete_area">
+      </div> */}
+      <IncompleteTodos
+        todos={IncompleteTodo}
+        onClickComplete={onClickComplete}
+        onClickDelete={onClickDelete}
+      />
+      {/* <div className="complete_area">
         <p className="title">完了のTODO</p>
         <ul>
           {CompleteList.map((todo, index) => {
@@ -93,8 +100,10 @@ const App = () => {
             );
           })}
         </ul>
-      </div>
+      </div> */}
+      <CompleteTodos todos={CompleteList} onClickBack={onClickBack} />
     </>
   );
 };
+
 export default App;
